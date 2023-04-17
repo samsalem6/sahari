@@ -1,0 +1,4 @@
+[2023-03-21 11:12:15] local.ERROR: Out of memory (allocated 23068672) (tried to allocate 1310720 bytes) {"userId":1,"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Out of memory (allocated 23068672) (tried to allocate 1310720 bytes) at D:\\Work\\my_project's\\Sahari2\\sahari\\vendor\\symfony\\http-foundation\\Response.php:74)
+[stacktrace]
+#0 {main}
+"} 
