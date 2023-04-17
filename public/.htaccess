@@ -1,0 +1,99 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Handle Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
+<IfModule mod_expires.c>
+	ExpiresActive on
+	AddType application/vnd.ms-fontobject .eot
+	AddType application/x-font-ttf .ttf
+	AddType application/x-font-opentype .otf
+	AddType application/x-font-woff .woff
+	AddType image/svg+xml .svg
+    AddType image/webp .webp
+	ExpiresByType application/vnd.ms-fontobject "access 1 year"
+	ExpiresByType application/x-font-ttf "access 1 year"
+	ExpiresByType application/x-font-opentype "access 1 year"
+	ExpiresByType application/x-font-woff "access 1 year"
+	ExpiresByType image/svg+xml "access 1 year"
+	ExpiresByType text/css "access 14 days"
+	ExpiresByType text/x-javascript "access 1 month"
+	ExpiresByType application/javascript "access 1 month"
+	ExpiresByType application/x-javascript "access 1 month"
+	ExpiresByType image/gif "access 2 months"
+	ExpiresByType image/png "access 2 months"
+	ExpiresByType image/jpg "access 2 months"
+	ExpiresByType image/jpeg "access 2 months"
+	ExpiresByType image/gif "access 2 months"
+	ExpiresByType image/webp "access 2 months"
+	ExpiresByType application/pdf "access 1 year"
+	ExpiresByType application/x-shockwave-flash "access 1 year"
+	ExpiresByType image/x-icon "access 1 year"
+	ExpiresByType image/vnd.microsoft.icon "access 1 year"
+</IfModule>
+
+<IfModule mod_headers.c>
+    #add hsts header
+    Header set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" env=HTTPS
+
+    # Serve gzip compressed CSS files if they exist
+    # and the client accepts gzip.
+    RewriteCond "%{HTTP:Accept-encoding}" "gzip"
+    RewriteCond "%{REQUEST_FILENAME}\.gz" -s
+    RewriteRule "^(.*)\.css" "$1\.css\.gz" [QSA]
+
+    # Serve gzip compressed JS files if they exist
+    # and the client accepts gzip.
+    RewriteCond "%{HTTP:Accept-encoding}" "gzip"
+    RewriteCond "%{REQUEST_FILENAME}\.gz" -s
+    RewriteRule "^(.*)\.js" "$1\.js\.gz" [QSA]
+
+
+    # Serve correct content types, and prevent mod_deflate double gzip.
+    RewriteRule "\.css\.gz$" "-" [T=text/css,E=no-gzip:1]
+    RewriteRule "\.js\.gz$" "-" [T=text/javascript,E=no-gzip:1]
+
+
+    <FilesMatch "(\.js\.gz|\.css\.gz)$">
+      # Serve correct encoding type.
+      Header append Content-Encoding gzip
+
+      # Force proxies to cache gzipped &
+      # non-gzipped css/js files separately.
+      Header append Vary Accept-Encoding
+    </FilesMatch>
+</IfModule>
+
+<ifModule mod_headers.c>
+  <filesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|swf)$">
+    Header set Cache-Control "max-age=360, public"
+  </filesMatch>
+  <filesMatch "\.(css)$">
+    Header set Cache-Control "max-age=360, public"
+  </filesMatch>
+  <filesMatch "\.(js)$">
+    Header set Cache-Control "max-age=360, private"
+  </filesMatch>
+  <filesMatch "\.(xml|txt)$">
+    Header set Cache-Control "max-age=360, public, must-revalidate"
+  </filesMatch>
+  <filesMatch "\.(html|htm|php)$">
+    Header set Cache-Control "max-age=360, private, must-revalidate"
+  </filesMatch>
+</ifModule>
